@@ -1,0 +1,7 @@
+services:
+  telegraf:
+    image: telegraf
+    container_name: telegraf_group4
+    restart: always
+    volumes:
+    - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro

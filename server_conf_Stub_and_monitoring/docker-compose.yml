@@ -1,7 +1,21 @@
 services:
+
+  influxdb:
+    image: influxdb:1.8-alpine
+    container_name: influxdb_group4
+    restart: always
+    environment:
+      - INFLUXDB_DB=influx
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+    ports:
+      - '${INFLUXDB_PORT}:${INNER_PORT_INFLUXDB}'
+    volumes:
+      - influxdb_data:/var/lib/influxdb
+
   telegraf:
     image: telegraf
-    container_name: telegraf
+    container_name: telegraf_group4
     restart: always
     volumes:
     - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
@@ -9,26 +23,10 @@ services:
       - influxdb
     links:
       - influxdb
-    ports:
-    - '${TELEGRAF_PORT}:${OUTER_PORT_TELEGRAF}'
-
-  influxdb:
-    image: influxdb:1.8-alpine
-    container_name: influxdb
-    restart: always
-    environment:
-      - INFLUXDB_DB=influx
-      - INFLUXDB_ADMIN_USER=admin
-      - INFLUXDB_ADMIN_PASSWORD=admin
-    ports:
-      - '${INFLUXDB_PORT}:${OUTER_PORT_INFLUXDB}'
-    volumes:
-      - influxdb_data:/var/lib/influxdb
-      - ./influxdb.conf:/etc/influxdb/influxdb.conf
 
   grafana:
     image: grafana/grafana
-    container_name: grafana-server
+    container_name: grafana-server_group4
     restart: always
     depends_on:
       - influxdb
@@ -39,7 +37,7 @@ services:
     links:
       - influxdb
     ports:
-      - '${GRAFANA_PORT}:${OUTER_PORT_GRAFANA}'
+      - '${GRAFANA_PORT}:${INNER_PORT_GRAFANA}'
     volumes:
       - grafana_data:/var/lib/grafana
       
