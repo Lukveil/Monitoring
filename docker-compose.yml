@@ -24,6 +24,7 @@ services:
       - '${INFLUXDB_PORT}:${OUTER_PORT_INFLUXDB}'
     volumes:
       - influxdb_data:/var/lib/influxdb
+      - ./influxdb.conf:/etc/influxdb/influxdb.conf
 
   grafana:
     image: grafana/grafana
